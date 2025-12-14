@@ -6,9 +6,10 @@
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
-
-    if (argc < 4) {
+int main(int argc, char *argv[])
+{
+    if (argc < 4)
+    {
         cout << "Usage:\n";
         cout << "  ini2json <config.ini> <schema.ini> <json|yaml>\n";
         return 1;
@@ -18,18 +19,34 @@ int main(int argc, char* argv[]) {
     string schemaFile = argv[2];
     string format = argv[3];
 
+    // ---------- LEXICAL ANALYSIS ----------
     auto tokens = tokenize(configFile);
+
+    // ✅ Empty config check (NOW CORRECT)
+    if (tokens.empty())
+    {
+        cout << "Error: Empty configuration file\n";
+        return 0;
+    }
+
+    // ---------- SYNTAX ANALYSIS ----------
     auto parsedConfig = parse(tokens);
+
+    // ---------- SEMANTIC ANALYSIS ----------
     auto schema = loadSchema(schemaFile);
     auto typedConfig = analyze(parsedConfig, schema);
 
-    if (format == "json") {
+    // ---------- CODE GENERATION ----------
+    if (format == "json")
+    {
         cout << generateJSON(typedConfig);
     }
-    else if (format == "yaml") {
+    else if (format == "yaml")
+    {
         cout << generateYAML(typedConfig);
     }
-    else {
+    else
+    {
         cout << "Unknown format. Use 'json' or 'yaml'\n";
     }
 

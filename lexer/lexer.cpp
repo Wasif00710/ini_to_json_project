@@ -10,22 +10,28 @@ vector<Token> tokenize(const string &filename)
 
     while (getline(file, line))
     {
-        if (line.size() == 0)
+        // remove leading spaces
+        int idx = 0;
+        while (idx < line.size() && (line[idx] == ' ' || line[idx] == '\t'))
+            idx++;
+
+        // skip empty or comment lines
+        if (idx >= line.size() || line[idx] == ';' || line[idx] == '#')
         {
             lineNo++;
             continue;
         }
 
-        // Section
-        if (line[0] == '[')
+        // -------- SECTION --------
+        if (line[idx] == '[' && line.back() == ']')
         {
             string section = "";
-            for (int i = 1; i < line.size() - 1; i++)
+            for (int i = idx + 1; i < line.size() - 1; i++)
                 section += line[i];
 
             tokens.push_back({SECTION, section, lineNo});
         }
-        // key=value
+        // -------- KEY = VALUE --------
         else
         {
             string key = "", value = "";
@@ -33,8 +39,6 @@ vector<Token> tokenize(const string &filename)
 
             for (char c : line)
             {
-
-                // ignore spaces
                 if (c == ' ' || c == '\t')
                     continue;
 
