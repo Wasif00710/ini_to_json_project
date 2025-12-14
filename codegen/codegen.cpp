@@ -1,5 +1,6 @@
 #include "codegen.h"
 
+// ---------------- JSON CODEGEN ----------------
 string generateJSON(map<string, map<string, TypedValue>> typedConfig) {
 
     string json = "{\n";
@@ -20,12 +21,10 @@ string generateJSON(map<string, map<string, TypedValue>> typedConfig) {
 
             json += "    \"" + kv.first + "\": ";
 
-            if (kv.second.type == "string") {
+            if (kv.second.type == "string")
                 json += "\"" + kv.second.value + "\"";
-            }
-            else {
-                json += kv.second.value; // int or bool
-            }
+            else
+                json += kv.second.value;
         }
 
         json += "\n  }";
@@ -33,4 +32,27 @@ string generateJSON(map<string, map<string, TypedValue>> typedConfig) {
 
     json += "\n}\n";
     return json;
+}
+
+// ---------------- YAML CODEGEN ----------------
+string generateYAML(map<string, map<string, TypedValue>> typedConfig) {
+
+    string yaml = "";
+
+    for (auto sec : typedConfig) {
+
+        yaml += sec.first + ":\n";
+
+        for (auto kv : sec.second) {
+            yaml += "  " + kv.first + ": ";
+
+            if (kv.second.type == "string")
+                yaml += "\"" + kv.second.value + "\"\n";
+            else
+                yaml += kv.second.value + "\n";
+        }
+        yaml += "\n";
+    }
+
+    return yaml;
 }

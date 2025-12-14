@@ -3,10 +3,12 @@
 
 #include <bits/stdc++.h>
 #include "../semantic/semantic.h"
-
 using namespace std;
 
-// generate JSON string from typed config
+// JSON generator
 string generateJSON(map<string, map<string, TypedValue>> typedConfig);
+
+// YAML generator
+string generateYAML(map<string, map<string, TypedValue>> typedConfig);
 
 #endif

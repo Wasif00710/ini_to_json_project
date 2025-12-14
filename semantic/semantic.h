@@ -2,16 +2,25 @@
 #define SEMANTIC_H
 
 #include <bits/stdc++.h>
+#include "../parser/parser.h"   // ⭐ REQUIRED
 using namespace std;
 
-// value with type
 struct TypedValue {
-    string type;   // "int", "bool", "string"
+    string type;
     string value;
+    int line;
 };
 
-// semantic analysis function
+struct SchemaRule {
+    string type;
+    bool required;
+};
+
+map<string, map<string, SchemaRule>>
+loadSchema(const string& filename);
+
 map<string, map<string, TypedValue>>
-analyze(map<string, map<string, string>> config);
+analyze(map<string, map<string, ParsedValue>> config,
+        map<string, map<string, SchemaRule>> schema);
 
 #endif

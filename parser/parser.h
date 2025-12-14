@@ -3,10 +3,14 @@
 
 #include <bits/stdc++.h>
 #include "../lexer/lexer.h"
-
 using namespace std;
 
-// function that builds config structure from tokens
-map<string, map<string, string>> parse(vector<Token> tokens);
+struct ParsedValue {
+    string value;
+    int line;
+};
+
+map<string, map<string, ParsedValue>>
+parse(const vector<Token>& tokens);
 
 #endif

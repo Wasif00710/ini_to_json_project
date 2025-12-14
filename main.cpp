@@ -6,22 +6,32 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
 
-    // 1. Lexical Analysis
-    vector<Token> tokens = tokenize("config.ini");
+    if (argc < 4) {
+        cout << "Usage:\n";
+        cout << "  ini2json <config.ini> <schema.ini> <json|yaml>\n";
+        return 1;
+    }
 
-    // 2. Syntax Analysis
-    auto config = parse(tokens);
+    string configFile = argv[1];
+    string schemaFile = argv[2];
+    string format = argv[3];
 
-    // 3. Semantic Analysis
-    auto typedConfig = analyze(config);
+    auto tokens = tokenize(configFile);
+    auto parsedConfig = parse(tokens);
+    auto schema = loadSchema(schemaFile);
+    auto typedConfig = analyze(parsedConfig, schema);
 
-    // 4. Code Generation
-    string json = generateJSON(typedConfig);
-
-    // Output JSON
-    cout << json;
+    if (format == "json") {
+        cout << generateJSON(typedConfig);
+    }
+    else if (format == "yaml") {
+        cout << generateYAML(typedConfig);
+    }
+    else {
+        cout << "Unknown format. Use 'json' or 'yaml'\n";
+    }
 
     return 0;
 }

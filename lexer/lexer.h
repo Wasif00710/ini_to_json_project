@@ -2,6 +2,7 @@
 #define LEXER_H
 
 #include <bits/stdc++.h>
+using namespace std;
 
 enum TokenType {
     SECTION,
@@ -13,9 +14,10 @@ enum TokenType {
 
 struct Token {
     TokenType type;
-    std::string text;
+    string text;
+    int line;   // ⭐ NEW
 };
 
-std::vector<Token> tokenize(const std::string& filename);
+vector<Token> tokenize(const string& filename);
 
 #endif

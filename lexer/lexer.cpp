@@ -1,56 +1,71 @@
 #include "lexer.h"
-#include <bits/stdc++.h>
 
-using namespace std;
-
-vector<Token> tokenize(const string& filename) {
+vector<Token> tokenize(const string &filename)
+{
     vector<Token> tokens;
     ifstream file(filename);
+
     string line;
+    int lineNo = 1;
 
-    while (getline(file, line)) {
-        if (line.length() == 0) continue;
-
-        // -------- SECTION [name] --------
-        if (line[0] == '[') {
-            string sectionName = "";
-
-            // start from index 1, skip '[' and stop before ']'
-            for (int i = 1; i < line.length() - 1; i++) {
-                sectionName += line[i];
-            }
-
-            tokens.push_back({SECTION, sectionName});
+    while (getline(file, line))
+    {
+        if (line.size() == 0)
+        {
+            lineNo++;
+            continue;
         }
 
-        // -------- KEY = VALUE --------
-        else {
-            string key = "";
-            string value = "";
-            bool foundEqual = false;
+        // Section
+        if (line[0] == '[')
+        {
+            string section = "";
+            for (int i = 1; i < line.size() - 1; i++)
+                section += line[i];
 
-            for (int i = 0; i < line.length(); i++) {
-                if (line[i] == '=') {
-                    foundEqual = true;
+            tokens.push_back({SECTION, section, lineNo});
+        }
+        // key=value
+        else
+        {
+            string key = "", value = "";
+            bool foundEq = false;
+
+            for (char c : line)
+            {
+
+                // ignore spaces
+                if (c == ' ' || c == '\t')
+                    continue;
+
+                if (c == '=')
+                {
+                    foundEq = true;
                     continue;
                 }
 
-                if (!foundEqual)
-                    key += line[i];
+                if (!foundEq)
+                    key += c;
                 else
-                    value += line[i];
+                    value += c;
             }
 
-            if (foundEqual) {
-                tokens.push_back({KEY, key});
-                tokens.push_back({ASSIGN, "="});
-                tokens.push_back({VALUE, value});
+            if (!foundEq)
+            {
+                cout << "Syntax Error (line " << lineNo
+                     << "): Missing '='\n";
+            }
+            else
+            {
+                tokens.push_back({KEY, key, lineNo});
+                tokens.push_back({ASSIGN, "=", lineNo});
+                tokens.push_back({VALUE, value, lineNo});
             }
         }
 
-        tokens.push_back({NEWLINE, "\\n"});
+        tokens.push_back({NEWLINE, "\\n", lineNo});
+        lineNo++;
     }
 
     return tokens;
 }
-
