@@ -1,8 +1,7 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 
 enum TokenType {
     SECTION,
