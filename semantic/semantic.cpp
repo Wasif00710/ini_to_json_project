@@ -18,7 +18,7 @@ bool isBool(string s)
     return (s == "true" || s == "false");
 }
 
-// ---------- LOAD SCHEMA (NO substr) ----------
+// ---------- LOAD SCHEMA  ----------
 
 map<string, map<string, SchemaRule>>
 loadSchema(const string &filename)
